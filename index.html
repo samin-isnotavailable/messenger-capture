@@ -6,16 +6,40 @@
 </head>
 <body>
   <div class="container">
-    <h1>Task Capture</h1>
+    <div id="loginView" class="card login-card">
+      <h1>Login</h1>
 
-    <textarea id="taskInput" placeholder="Paste Messenger task"></textarea>
+      <input id="emailInput" type="email" placeholder="Email">
+      <input id="passwordInput" type="password" placeholder="Password">
 
-    <button id="saveBtn">Save Task</button>
+      <button id="loginBtn">Login</button>
+      <p id="loginStatus" class="status-text"></p>
+    </div>
 
-    <p id="status"></p>
+    <div id="appView" style="display: none;">
+      <header class="topbar">
+        <div>
+          <h1>Task Capture</h1>
+          <p class="subtitle">Messenger operations tracker</p>
+        </div>
 
-    <h2>Saved Tasks</h2>
-    <ul id="taskList"></ul>
+        <button id="logoutBtn" class="secondary-btn">Logout</button>
+      </header>
+
+      <section class="card input-card">
+        <textarea id="taskInput" placeholder="Paste or write a task"></textarea>
+        <button id="saveBtn">Save Task</button>
+        <p id="status" class="status-text"></p>
+      </section>
+
+      <section class="board">
+        <div class="board-header">
+          <h2>Saved Tasks</h2>
+        </div>
+
+        <ul id="taskList" class="task-list"></ul>
+      </section>
+    </div>
   </div>
 
   <script type="module" src="/src/main.js"></script>
