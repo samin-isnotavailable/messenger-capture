@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      width: 260px;
+      padding: 14px;
+      background: #111;
+      color: white;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 8px;
+      box-sizing: border-box;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    #status {
+      font-size: 13px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <h3>Tracker Login</h3>
+
+  <input id="email" type="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+
+  <button id="loginBtn">Login</button>
+  <button id="logoutBtn">Logout</button>
+
+  <p id="status"></p>
+
+  <script src="popup.js"></script>
+</body>
+</html>

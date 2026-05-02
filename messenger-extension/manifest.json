@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Messenger Task Capture",
+  "version": "1.0",
+  "permissions": ["contextMenus", "activeTab", "scripting", "storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Messenger Task Capture"
+  },
+  "host_permissions": [
+    "https://*.facebook.com/*",
+    "https://*.messenger.com/*",
+    "https://hmkaprlgnnszcknwessn.supabase.co/*"
+  ]
+}
