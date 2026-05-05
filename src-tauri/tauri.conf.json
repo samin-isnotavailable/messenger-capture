@@ -2,17 +2,23 @@
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "messenger-capture",
   "version": "0.1.0",
-  "identifier": "com.macbookair.messenger-capture",
+  "identifier": "com.ezgadgets.task",
   "build": {
-    "frontendDist": "../src"
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "devUrl": "http://localhost:5173",
+    "frontendDist": "../dist"
   },
   "app": {
     "withGlobalTauri": true,
     "windows": [
       {
         "title": "messenger-capture",
-        "width": 800,
-        "height": 600
+        "width": 450,
+        "height": 650,
+        "decorations": false,
+        "transparent": true,
+        "visible": false
       }
     ],
     "security": {
