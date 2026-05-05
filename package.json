@@ -14,5 +14,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.105.3"
+    "@supabase/supabase-js": "^2.105.1",
+    "@vercel/analytics": "^2.0.1"
   }
 }
