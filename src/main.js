@@ -1,4 +1,9 @@
 import { supabase } from "./supabase.js";
+import { supabase } from './supabase.js'
+import { inject } from '@vercel/analytics'
+
+// Initialize Vercel Analytics
+inject()
 
 // Login elements
 const appHeader = document.getElementById("appHeader");
