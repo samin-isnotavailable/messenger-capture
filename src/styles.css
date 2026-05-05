@@ -1,129 +1,47 @@
-* {
-  box-sizing: border-box;
+/* Custom macOS-style scrollbar for the task list */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px; /* Clean, thin width */
 }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #111;
-  color: white;
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.container {
-  width: min(1000px, 92vw);
-  margin: 40px auto;
-}
-
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-h1, h2, p {
-  margin-top: 0;
-}
-
-.subtitle {
-  color: #aaa;
-  margin-bottom: 0;
-}
-
-.card {
-  background: #1b1b1b;
-  border: 1px solid #333;
-  border-radius: 14px;
-  padding: 20px;
-}
-
-.login-card {
-  max-width: 420px;
-  margin: 120px auto;
-}
-
-.input-card {
-  margin-bottom: 28px;
-}
-
-input,
-textarea {
-  width: 100%;
-  background: #0f0f0f;
-  color: white;
-  border: 1px solid #444;
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.1); /* Subtle dark mode thumb */
   border-radius: 10px;
-  padding: 14px;
-  font-size: 15px;
-  margin-bottom: 12px;
 }
 
-textarea {
-  min-height: 130px;
-  resize: vertical;
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.2
+  ); /* Brightens when you interact with it */
 }
 
-button {
-  background: white;
-  color: #111;
-  border: none;
-  border-radius: 10px;
-  padding: 11px 16px;
-  font-weight: 600;
-  cursor: pointer;
+/* Ghost List Styles */
+#taskList li {
+  background: transparent;
+  border-radius: 0;
+  border-left: 2px solid transparent;
+  transition: all 0.2s ease;
 }
 
-button:hover {
-  opacity: 0.85;
+#taskList li:hover {
+  background: rgba(255, 255, 255, 0.02);
+  border-left-color: #6366f1; /* Indigo accent on hover */
 }
 
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.secondary-btn {
-  background: #2a2a2a;
-  color: white;
-  border: 1px solid #444;
-}
-
-.status-text {
-  color: #aaa;
-  margin: 12px 0 0;
-}
-
-.board {
-  margin-top: 20px;
-}
-
-.board-header {
-  margin-bottom: 12px;
-}
-
-.task-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.task-list li {
-  background: #1b1b1b;
-  border: 1px solid #333;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.task-list span {
-  line-height: 1.5;
-}
-
-.task-list div {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
+/* Metadata pills */
+.meta-pill {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }

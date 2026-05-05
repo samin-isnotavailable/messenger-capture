@@ -1,0 +1,172 @@
+:root {
+  --bg: #09090b;
+  --card: #18181b;
+  --text: #e4e4e7;
+  --muted: #71717a;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+}
+
+body {
+  width: 320px;
+  margin: 0;
+  padding: 20px;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  cursor: default;
+}
+
+/* Layout Utilities (Matches the JS logic) */
+.hidden {
+  display: none !important;
+}
+.flex {
+  display: flex !important;
+}
+.flex-col {
+  flex-direction: column;
+}
+.items-center {
+  align-items: center;
+}
+.gap-3 {
+  gap: 12px;
+}
+
+/* Header */
+header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-box {
+  background: rgba(79, 70, 229, 0.1);
+  border: 1px solid rgba(79, 70, 229, 0.2);
+  padding: 6px;
+  border-radius: 8px;
+  color: #818cf8;
+  display: flex;
+}
+
+.header-text h1 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #f4f4f5;
+}
+.header-text p {
+  margin: 0;
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Inputs */
+input {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px 12px;
+  color: #f4f4f5;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+input::placeholder {
+  color: #52525b;
+}
+input:focus {
+  border-color: #6366f1;
+}
+
+/* Buttons */
+button {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  transition: all 0.2s;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.2);
+}
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-secondary {
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #d4d4d8;
+}
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Status / Active View */
+.success-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.status-text {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 4px 0;
+}
+.user-email {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 20px 0;
+}
+
+#status {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 16px;
+  min-height: 16px;
+  font-weight: 500;
+}
+.text-red-400 {
+  color: #f87171;
+}
+.text-zinc-500 {
+  color: var(--muted);
+}
