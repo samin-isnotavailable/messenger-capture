@@ -8,31 +8,18 @@
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  background-color: transparent;
-  /* Use fixed dimensions to prevent the "sliver" look */
   width: 320px;
-  height: 450px;
-  overflow: hidden;
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-.app-wrapper {
-  background-color: var(--bg);
-  /* Ensure the wrapper takes up the full defined body size */
-  width: 100%;
-  height: 100%;
+  margin: 0;
   padding: 20px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  cursor: default;
 }
 
-/* Layout Utilities */
+/* Layout Utilities (Matches the JS logic) */
 .hidden {
   display: none !important;
 }
@@ -48,9 +35,6 @@ body {
 .gap-3 {
   gap: 12px;
 }
-.flex-1 {
-  flex: 1;
-}
 
 /* Header */
 header {
@@ -60,8 +44,6 @@ header {
   margin-bottom: 20px;
   padding-bottom: 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  /* The browser ignores this, but Tauri uses it to move the window */
-  cursor: grab;
 }
 
 .logo-box {
@@ -73,9 +55,22 @@ header {
   display: flex;
 }
 
-/* Inputs & Selects */
-input,
-select {
+.header-text h1 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #f4f4f5;
+}
+.header-text p {
+  margin: 0;
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Inputs */
+input {
   width: 100%;
   background: var(--card);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -88,25 +83,35 @@ select {
   transition: border-color 0.2s;
 }
 
-input:focus,
-select:focus {
-  border-color: var(--primary);
+input::placeholder {
+  color: #52525b;
+}
+input:focus {
+  border-color: #6366f1;
 }
 
 /* Buttons */
 button {
   width: 100%;
-  padding: 12px 16px;
+  padding: 10px 16px;
   border-radius: 12px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  border: none;
-  transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  border: none;
+  transition: all 0.2s;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .btn-primary {
@@ -114,7 +119,6 @@ button {
   color: white;
   box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.2);
 }
-
 .btn-primary:hover {
   background: var(--primary-hover);
 }
@@ -124,8 +128,11 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #d4d4d8;
 }
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
 
-/* Success Icon Styling */
+/* Status / Active View */
 .success-icon {
   width: 48px;
   height: 48px;
@@ -139,21 +146,27 @@ button {
   border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
-/* Force all heading and paragraph text to use the light text variable */
-h1, h2, h3, p, label, span {
-  color: var(--text) !important;
+.status-text {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 4px 0;
+}
+.user-email {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 20px 0;
 }
 
-/* Specifically fix the header area shown in your red box */
-.header-text h1 {
-  color: #f4f4f5 !important; /* Bright white */
+#status {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 16px;
+  min-height: 16px;
+  font-weight: 500;
 }
-
-.header-text p {
-  color: var(--muted) !important; /* Zinc/Gray for the sub-text */
+.text-red-400 {
+  color: #f87171;
 }
-
-/* Ensure inputs aren't using black text */
-input, select {
-  color: #f4f4f5 !important;
+.text-zinc-500 {
+  color: var(--muted);
 }

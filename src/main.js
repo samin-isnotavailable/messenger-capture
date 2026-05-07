@@ -1,4 +1,8 @@
 import { supabase } from "./supabase.js";
+import { inject } from '@vercel/analytics'
+
+// Initialize Vercel Analytics
+inject()
 
 // Login elements
 const appHeader = document.getElementById("appHeader");
@@ -60,7 +64,8 @@ loginBtn.addEventListener("click", async () => {
 
   if (!email || !password) {
     loginStatus.innerText = "Enter email and password";
-    loginStatus.className = "text-center text-sm text-red-400 mt-4 min-h-[20px]";
+    loginStatus.className =
+      "text-center text-sm text-red-400 mt-4 min-h-[20px]";
     return;
   }
 
@@ -71,7 +76,8 @@ loginBtn.addEventListener("click", async () => {
 
   if (error) {
     loginStatus.innerText = error.message;
-    loginStatus.className = "text-center text-sm text-red-400 mt-4 min-h-[20px]";
+    loginStatus.className =
+      "text-center text-sm text-red-400 mt-4 min-h-[20px]";
   } else {
     loginStatus.innerText = "";
     showApp();
@@ -92,12 +98,28 @@ if (toggleCompletedBtn) {
 
     if (hideCompleted) {
       toggleCompletedBtn.innerHTML = `<i class="ph-bold ph-eye text-[14px]"></i> <span>Show Done</span>`;
-      toggleCompletedBtn.classList.add("text-violet-400", "bg-violet-500/10", "rounded-md");
-      toggleCompletedBtn.classList.remove("text-zinc-400");
+      toggleCompletedBtn.classList.add(
+        "text-indigo-400",
+        "bg-indigo-500/10",
+        "border-indigo-500/20",
+      );
+      toggleCompletedBtn.classList.remove(
+        "text-zinc-300",
+        "bg-white/5",
+        "border-white/10",
+      );
     } else {
       toggleCompletedBtn.innerHTML = `<i class="ph-bold ph-eye-slash text-[14px]"></i> <span>Hide Done</span>`;
-      toggleCompletedBtn.classList.remove("text-violet-400", "bg-violet-500/10", "rounded-md");
-      toggleCompletedBtn.classList.add("text-zinc-400");
+      toggleCompletedBtn.classList.remove(
+        "text-indigo-400",
+        "bg-indigo-500/10",
+        "border-indigo-500/20",
+      );
+      toggleCompletedBtn.classList.add(
+        "text-zinc-300",
+        "bg-white/5",
+        "border-white/10",
+      );
     }
 
     loadTasks();
@@ -106,7 +128,8 @@ if (toggleCompletedBtn) {
 
 // Load tasks
 async function loadTasks() {
-  taskList.innerHTML = '<li class="text-xs text-zinc-600 text-center py-6 font-medium tracking-wide uppercase">Syncing...</li>';
+  taskList.innerHTML =
+    '<li class="text-sm text-zinc-500 text-center py-4">Loading tasks...</li>';
 
   const { data, error } = await supabase
     .from("tasks")
@@ -121,64 +144,74 @@ async function loadTasks() {
   taskList.innerHTML = "";
   let visibleTasks = 0;
 
-  data.forEach((item, index) => {
+  data.forEach((item) => {
     if (hideCompleted && item.status === "done") return;
     visibleTasks++;
 
     const li = document.createElement("li");
+    // FIXED: Strict horizontal layout to prevent stacking in narrow popup windows
+    li.className =
+      "group flex justify-between items-center gap-4 p-4 rounded-2xl bg-[#121214] border border-white/5 hover:border-white/10 transition-all duration-200 shadow-sm relative overflow-hidden";
 
-    // Determine colors based on priority
-    let borderTheme = "border border-zinc-500/20";
-    let glowTheme = "hover:border-zinc-500/50 hover:shadow-[0_0_15px_rgba(113,113,122,0.1)]";
-    let iconColor = "text-zinc-400";
+    let stripColor = "bg-zinc-700";
+    if (item.priority === "high") stripColor = "bg-red-500";
+    if (item.priority === "low") stripColor = "bg-blue-500";
+    if (item.priority === "medium") stripColor = "bg-indigo-500";
 
-    if (item.status !== "done") {
-      if (item.priority === "high") {
-        borderTheme = "border-l-4 border-l-rose-500 border-y-white/5 border-r-white/5";
-        glowTheme = "hover:border-rose-500/40 hover:shadow-[0_0_20px_rgba(244,63,94,0.15)]";
-        iconColor = "text-rose-400";
-      } else if (item.priority === "low") {
-        borderTheme = "border-l-4 border-l-emerald-500 border-y-white/5 border-r-white/5";
-        glowTheme = "hover:border-emerald-500/40 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)]";
-        iconColor = "text-emerald-400";
-      } else {
-        borderTheme = "border-l-4 border-l-amber-500 border-y-white/5 border-r-white/5";
-        glowTheme = "hover:border-amber-500/40 hover:shadow-[0_0_20px_rgba(245,158,11,0.15)]";
-        iconColor = "text-amber-400";
-      }
-    }
-
-    // ANIMATION & WIDE LAYOUT
-    li.className = `animate-task task-card-hover group flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 p-5 rounded-2xl bg-[#121214] ${borderTheme} ${glowTheme} transition-all duration-300 relative`;
-    li.style.animationDelay = `${index * 0.05}s`;
+    const priorityStrip = document.createElement("div");
+    priorityStrip.className = `absolute left-0 top-0 bottom-0 w-[3px] ${stripColor} opacity-50`;
+    li.appendChild(priorityStrip);
 
     // --- VIEW STATE CONTAINER ---
     const viewState = document.createElement("div");
-    viewState.className = "flex-1 flex flex-col min-w-0";
+    viewState.className = "flex-1 flex flex-col min-w-0 pl-1";
 
     const text = document.createElement("span");
-    text.className = "text-[15px] leading-relaxed break-words whitespace-pre-wrap font-medium transition-colors ";
-    text.className += item.status === "done" ? "text-zinc-600 line-through decoration-zinc-700/50" : "text-zinc-100";
+    text.className =
+      "text-[15px] leading-relaxed break-words whitespace-pre-wrap transition-colors ";
+
+    if (item.status === "done") {
+      text.className += "text-zinc-500 line-through decoration-zinc-700";
+    } else {
+      text.className += "text-zinc-100";
+    }
+
     text.innerText = item.task;
     viewState.appendChild(text);
 
-    // COLORFUL METADATA
     const metaContainer = document.createElement("div");
-    metaContainer.className = "flex items-center gap-3 mt-3 flex-wrap w-full";
+    metaContainer.className = "flex items-center gap-3 mt-2.5 flex-wrap w-full";
 
     if (item.status !== "done") {
       const prioritySpan = document.createElement("span");
-      prioritySpan.className = `meta-pill ${iconColor} bg-white/5`;
-      const icon = item.priority === "high" ? "ph-warning-circle pulse-icon" : item.priority === "low" ? "ph-arrow-down" : "ph-minus";
-      prioritySpan.innerHTML = `<i class="ph-bold ${icon}"></i> ${item.priority || "Medium"}`;
+      let pColor = "text-zinc-400",
+        pIcon = "ph-flag",
+        pText = "Med";
+
+      if (item.priority === "high") {
+        pColor = "text-red-400";
+        pIcon = "ph-flag-banner";
+        pText = "High";
+      } else if (item.priority === "low") {
+        pColor = "text-blue-400";
+        pText = "Low";
+      }
+
+      prioritySpan.className = `text-[11px] font-bold uppercase tracking-wider flex items-center gap-1 ${pColor}`;
+      prioritySpan.innerHTML = `<i class="ph-bold ${pIcon}"></i> ${pText}`;
       metaContainer.appendChild(prioritySpan);
     }
 
     if (item.due_date && item.status !== "done") {
       const dateSpan = document.createElement("span");
-      const dateStr = new Date(item.due_date).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
-      dateSpan.className = "meta-pill text-violet-400 bg-violet-500/10 border-violet-500/20";
-      dateSpan.innerHTML = `<i class="ph-bold ph-calendar-star"></i> ${dateStr}`;
+      const dateStr = new Date(item.due_date).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        timeZone: "UTC",
+      });
+      dateSpan.className =
+        "text-[11px] text-zinc-400 font-bold uppercase tracking-wider flex items-center gap-1";
+      dateSpan.innerHTML = `<i class="ph-bold ph-calendar-blank"></i> ${dateStr}`;
       metaContainer.appendChild(dateSpan);
     }
 
@@ -186,15 +219,17 @@ async function loadTasks() {
       const linkSpan = document.createElement("a");
       linkSpan.href = item.source_url;
       linkSpan.target = "_blank";
-      linkSpan.className = "text-[11px] text-indigo-400 hover:text-indigo-300 font-bold uppercase tracking-wider flex items-center gap-1 transition-colors ml-auto mr-2";
+      linkSpan.className =
+        "text-[11px] text-indigo-400 hover:text-indigo-300 font-bold uppercase tracking-wider flex items-center gap-1 transition-colors ml-auto mr-2";
       linkSpan.innerHTML = `<i class="ph-bold ph-link"></i> Open Chat`;
       metaContainer.appendChild(linkSpan);
     }
 
     if (item.status === "done" && item.done_by_email) {
       const doneBy = document.createElement("span");
-      doneBy.className = "meta-pill text-zinc-500 border-zinc-700/30";
-      doneBy.innerHTML = `<i class="ph-fill ph-check-circle"></i> ${item.done_by_email.split('@')[0]}`;
+      doneBy.className =
+        "text-[10px] text-zinc-500 font-semibold uppercase tracking-wider flex items-center gap-1";
+      doneBy.innerHTML = `<i class="ph-fill ph-check-circle"></i> Completed by ${item.done_by_email}`;
       metaContainer.appendChild(doneBy);
     }
 
@@ -202,17 +237,19 @@ async function loadTasks() {
 
     // --- EDIT STATE CONTAINER ---
     const editState = document.createElement("div");
-    editState.className = "hidden flex-1 flex-col gap-3 w-full";
+    editState.className = "hidden flex-1 flex-col gap-3 w-full pl-1";
 
     const editInput = document.createElement("textarea");
-    editInput.className = "w-full bg-[#09090b] border border-indigo-500/50 rounded-xl p-3 text-sm text-zinc-100 outline-none focus:border-indigo-400 resize-y min-h-[80px] shadow-inner";
+    editInput.className =
+      "w-full bg-[#09090b] border border-white/10 rounded-xl p-3 text-sm text-zinc-100 outline-none focus:border-indigo-500 resize-y min-h-[80px]";
     editInput.value = item.task;
 
     const editControlsRow = document.createElement("div");
-    editControlsRow.className = "flex gap-2 items-center flex-wrap justify-end mt-1";
+    editControlsRow.className = "flex gap-2 items-center flex-wrap";
 
     const editPriority = document.createElement("select");
-    editPriority.className = "bg-[#09090b] border border-white/10 rounded-lg text-xs font-medium text-zinc-300 px-3 py-2 outline-none cursor-pointer appearance-none";
+    editPriority.className =
+      "bg-[#09090b] border border-white/10 rounded-lg text-xs font-medium text-zinc-300 px-3 py-2 outline-none cursor-pointer focus:border-indigo-500 appearance-none";
     editPriority.innerHTML = `
       <option value="low" ${item.priority === "low" ? "selected" : ""}>Low Priority</option>
       <option value="medium" ${!item.priority || item.priority === "medium" ? "selected" : ""}>Medium Priority</option>
@@ -221,30 +258,42 @@ async function loadTasks() {
 
     const editDate = document.createElement("input");
     editDate.type = "date";
-    editDate.className = "bg-[#09090b] border border-white/10 rounded-lg text-xs font-medium text-zinc-300 px-3 py-2 outline-none cursor-pointer [color-scheme:dark]";
+    editDate.className =
+      "bg-[#09090b] border border-white/10 rounded-lg text-xs font-medium text-zinc-300 px-3 py-2 outline-none cursor-pointer focus:border-indigo-500 [color-scheme:dark]";
     editDate.value = item.due_date || "";
 
+    const editActions = document.createElement("div");
+    editActions.className = "flex gap-2 ml-auto";
+
     const cancelEditBtn = document.createElement("button");
-    cancelEditBtn.className = "text-zinc-400 hover:text-zinc-200 font-medium text-xs px-4 py-2 transition-colors";
+    cancelEditBtn.className =
+      "bg-white/5 hover:bg-white/10 text-zinc-300 font-medium text-xs px-4 py-2 rounded-lg transition-colors";
     cancelEditBtn.innerText = "Cancel";
 
     const saveEditBtn = document.createElement("button");
-    saveEditBtn.className = "bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-colors shadow-sm";
+    saveEditBtn.className =
+      "bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs px-4 py-2 rounded-lg transition-colors shadow-sm";
     saveEditBtn.innerText = "Save";
 
-    editControlsRow.append(editPriority, editDate, cancelEditBtn, saveEditBtn);
+    editActions.append(cancelEditBtn, saveEditBtn);
+    editControlsRow.append(editPriority, editDate, editActions);
     editState.append(editInput, editControlsRow);
 
-    // --- ACTION BUTTONS ---
+    // --- ACTION BUTTONS (FIXED ALIGNMENT) ---
     const controls = document.createElement("div");
-    controls.className = "flex items-center gap-2 shrink-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300";
+    controls.className = "flex items-center gap-1.5 shrink-0"; // Forced strictly horizontal
 
     const isPending = item.status === "pending";
 
     const toggleBtn = document.createElement("button");
-    toggleBtn.innerHTML = isPending ? `<i class="ph-bold ph-check text-lg"></i>` : `<i class="ph-bold ph-arrow-counter-clockwise text-lg"></i>`;
-    toggleBtn.className = `w-10 h-10 rounded-xl transition-all transform hover:scale-110 flex items-center justify-center shadow-lg ${isPending ? "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-white hover:shadow-emerald-500/30" : "bg-orange-500/10 text-orange-400 hover:bg-orange-500 hover:text-white"
-      }`;
+    toggleBtn.innerHTML = isPending
+      ? `<i class="ph-bold ph-check"></i>`
+      : `<i class="ph-bold ph-arrow-counter-clockwise"></i>`;
+    toggleBtn.className = `p-2 rounded-xl transition-colors flex items-center justify-center ${
+      isPending
+        ? "bg-white/5 text-zinc-400 hover:bg-emerald-500/20 hover:text-emerald-400"
+        : "bg-white/5 text-zinc-400 hover:bg-orange-500/20 hover:text-orange-400"
+    }`;
     toggleBtn.title = isPending ? "Mark Done" : "Undo";
 
     toggleBtn.onclick = async () => {
@@ -263,8 +312,9 @@ async function loadTasks() {
     };
 
     const editBtn = document.createElement("button");
-    editBtn.innerHTML = `<i class="ph-bold ph-pencil-simple text-lg"></i>`;
-    editBtn.className = "w-10 h-10 rounded-xl bg-white/5 text-zinc-400 hover:bg-blue-500 hover:text-white hover:shadow-blue-500/30 hover:scale-110 transition-all shadow-lg flex items-center justify-center";
+    editBtn.innerHTML = `<i class="ph-bold ph-pencil-simple"></i>`;
+    editBtn.className =
+      "p-2 rounded-xl bg-white/5 text-zinc-400 hover:bg-blue-500/20 hover:text-blue-400 transition-colors flex items-center justify-center";
     editBtn.title = "Edit Task";
 
     editBtn.onclick = () => {
@@ -272,7 +322,6 @@ async function loadTasks() {
       controls.classList.add("hidden");
       editState.classList.remove("hidden");
       editState.classList.add("flex");
-      li.classList.remove("hover:bg-[#121214]"); // Lock background
     };
 
     cancelEditBtn.onclick = () => {
@@ -280,7 +329,6 @@ async function loadTasks() {
       editState.classList.add("hidden");
       viewState.classList.remove("hidden");
       controls.classList.remove("hidden");
-      li.classList.add("hover:bg-[#121214]");
       editInput.value = item.task;
       editPriority.value = item.priority || "medium";
       editDate.value = item.due_date || "";
@@ -307,15 +355,20 @@ async function loadTasks() {
     };
 
     const deleteBtn = document.createElement("button");
-    deleteBtn.innerHTML = `<i class="ph-bold ph-trash text-lg"></i>`;
-    deleteBtn.className = "w-10 h-10 rounded-xl bg-white/5 text-zinc-400 hover:bg-rose-500 hover:text-white hover:shadow-rose-500/30 hover:scale-110 transition-all shadow-lg flex items-center justify-center";
+    deleteBtn.innerHTML = `<i class="ph-bold ph-trash"></i>`;
+    deleteBtn.className =
+      "p-2 rounded-xl bg-white/5 text-zinc-400 hover:bg-red-500/20 hover:text-red-400 transition-colors flex items-center justify-center";
     deleteBtn.title = "Delete Task";
 
     deleteBtn.onclick = async () => {
       if (confirm("Are you sure you want to delete this task?")) {
-        const { error } = await supabase.from("tasks").delete().eq("id", item.id);
+        const { error } = await supabase
+          .from("tasks")
+          .delete()
+          .eq("id", item.id);
         if (error) {
           alert("Failed to delete: " + error.message);
+          console.error(error);
         }
       }
     };
@@ -332,9 +385,9 @@ async function loadTasks() {
 
   if (visibleTasks === 0) {
     taskList.innerHTML = `
-      <div class="flex flex-col items-center justify-center py-16 text-zinc-500 animate-task">
-        <i class="ph-thin ph-check-circle text-5xl mb-3 opacity-20"></i>
-        <p class="text-xs font-semibold tracking-wide uppercase">Inbox Zero</p>
+      <div class="flex flex-col items-center justify-center py-10 text-zinc-500">
+        <i class="ph-fill ph-check-circle text-4xl mb-2 opacity-30"></i>
+        <p class="text-sm font-medium">You're all caught up!</p>
       </div>
     `;
   }
@@ -402,9 +455,13 @@ button.addEventListener("click", async () => {
 // Real-time listener
 supabase
   .channel("tasks-changes")
-  .on("postgres_changes", { event: "*", schema: "public", table: "tasks" }, () => {
-    loadTasks();
-  })
+  .on(
+    "postgres_changes",
+    { event: "*", schema: "public", table: "tasks" },
+    () => {
+      loadTasks();
+    },
+  )
   .subscribe();
 
 // Init
