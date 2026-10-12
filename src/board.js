@@ -57,15 +57,15 @@ const SORT_FIELDS = {
   due_date: { label: 'Due Date', dir: { asc: 'Earliest first', desc: 'Latest first' }, defaultDir: 'asc' },
   created_at: { label: 'Date of Entry', dir: { desc: 'Newest first', asc: 'Oldest first' }, defaultDir: 'desc' },
 };
-const DEFAULT_SORT = [
-  { field: 'priority', dir: 'desc' },
-  { field: 'due_date', dir: 'asc' },
-  { field: 'created_at', dir: 'desc' },
-];
+// Default is plain newest first, same as the board has always been.
+// Priority / due date ordering is opt-in through the Sort menu.
+const DEFAULT_SORT = [{ field: 'created_at', dir: 'desc' }];
 
+// 'sort.v2': anyone who saved the old three-level default while testing
+// starts fresh on newest first.
 function loadSort() {
   try {
-    const saved = JSON.parse(prefs.get('sort', 'null'));
+    const saved = JSON.parse(prefs.get('sort.v2', 'null'));
     if (Array.isArray(saved) && saved.length && saved.length <= 3) {
       const seen = new Set();
       const ok = saved.every((s) => SORT_FIELDS[s?.field] && ['asc', 'desc'].includes(s.dir) && !seen.has(s.field) && seen.add(s.field));
@@ -262,7 +262,7 @@ function renderSortMenu() {
 }
 
 function applySort() {
-  prefs.set('sort', JSON.stringify(ui.sort));
+  prefs.set('sort.v2', JSON.stringify(ui.sort));
   renderSortTrigger();
   renderSortMenu();
   renderAll();
