@@ -1,0 +1,508 @@
+:root {
+  --bg: #0f1115;
+  --surface: #1a1d24;
+  --surface-2: #23272f;
+  --border: #2c313a;
+  --text: #e8e9ec;
+  --text-dim: #9aa0ab;
+  --accent: #4f7cff;
+  --danger: #ff5f5f;
+  --radius: 8px;
+
+  --priority-high: #ff5f7a;
+  --priority-medium: #f2b544;
+  --priority-low: #6fcf97;
+  --due-color: #8f7cff;
+  --progress-color: #4dd88a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: white;
+  padding: 8px 14px;
+  font-size: 14px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button.btn-secondary {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+input,
+select,
+textarea {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+/* Login screen */
+.login-screen {
+  max-width: 320px;
+  margin: 15vh auto;
+  padding: 24px;
+}
+
+.login-screen h1 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.login-screen form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.error {
+  color: var(--danger);
+  font-size: 13px;
+  min-height: 16px;
+}
+
+/* Dashboard */
+.dashboard {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-email {
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.user-role {
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+
+.user-role.role-super_admin {
+  background: #3a2b0f;
+  color: #f2b544;
+}
+
+/* Department tabs */
+.dept-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.dept-tab {
+  background: var(--surface-2);
+  color: var(--text-dim);
+  padding: 6px 14px;
+  font-size: 13px;
+}
+
+.dept-tab.active {
+  background: var(--accent);
+  color: white;
+}
+
+.dept-label {
+  color: var(--text-dim);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Add-task bar — single input; hitting Enter opens the creation modal */
+.task-controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.task-controls input {
+  flex: 1;
+}
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.filter-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.filter-bar select {
+  padding: 6px 8px;
+  font-size: 13px;
+}
+
+/* Task list */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.task-row:hover {
+  border-color: var(--accent);
+}
+
+.task-row.task-done {
+  filter: grayscale(1);
+  opacity: 0.55;
+}
+
+.task-row.task-done .task-title {
+  text-decoration: line-through;
+}
+
+.task-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.task-title {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap; /* preserve intentional single line breaks after normalization */
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.empty-state {
+  color: var(--text-dim);
+  text-align: center;
+  padding: 40px 0;
+}
+
+/* Outlined pills — priority, due date, completion ratio (matches the
+   sketch: border-only badges, not filled backgrounds) */
+.pill {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  background: transparent;
+  white-space: nowrap;
+}
+
+.pill-priority.priority-high {
+  color: var(--priority-high);
+}
+
+.pill-priority.priority-medium {
+  color: var(--priority-medium);
+}
+
+.pill-priority.priority-low {
+  color: var(--priority-low);
+}
+
+.pill-due {
+  color: var(--due-color);
+}
+
+.pill-progress {
+  color: var(--progress-color);
+}
+
+/* Task type badge (kept as a plain low-emphasis tag, not a pill) */
+.task-badges {
+  display: flex;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.task-type-badge {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-dim);
+  background: var(--surface-2);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* Row icons — source link + delete, icon-only, right-aligned */
+.row-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 14px;
+  padding: 0;
+}
+
+.icon-btn:hover {
+  background: var(--surface-2);
+  opacity: 1;
+}
+
+.delete-btn {
+  color: var(--danger);
+}
+
+/* Modal (create-task + task detail) */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.modal-field input,
+.modal-field select,
+.modal-field textarea {
+  color: var(--text);
+}
+
+.modal-row {
+  display: flex;
+  gap: 12px;
+}
+
+.modal-row .modal-field {
+  flex: 1;
+}
+
+.required {
+  color: var(--danger);
+}
+
+.modal-assignee-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 160px;
+  overflow-y: auto;
+  padding: 8px;
+  background: var(--surface-2);
+  border-radius: var(--radius);
+}
+
+.assignee-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.assignee-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.fulfilled-note {
+  color: var(--accent);
+  font-size: 11px;
+}
+
+.modal-meta-line {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.modal-error {
+  color: var(--danger);
+  font-size: 13px;
+  margin: 0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* Admin panel */
+.modal-wide {
+  max-width: 720px;
+  width: 95vw;
+}
+
+.admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 55vh;
+  overflow-y: auto;
+}
+
+.admin-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 0.8fr 0.9fr auto auto;
+  gap: 8px;
+  align-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+}
+
+.admin-row-identity {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-row-username {
+  font-size: 13px;
+}
+
+.admin-row-email {
+  font-size: 11px;
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-username-input,
+.admin-role-select,
+.admin-dept-select {
+  font-size: 12px;
+  padding: 5px 6px;
+}
+
+.admin-save-btn {
+  font-size: 12px;
+  padding: 5px 10px;
+}
+
+.admin-row-status {
+  font-size: 11px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .admin-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
